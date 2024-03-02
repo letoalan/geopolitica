@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planisphère Satellite avec Leaflet</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+
+</head>
+<body>
+<div class="container">
+    <h1>Géopolitica</h1>
+</div>
+<div class="consigne">
+    <p>Choisissez le fichier GeoJSON, puis le continent et les pays que vous souhaitez, en fonction du code des tableaux (index) et leur couleur individuelle, avant de télécharger exportable vers l'application umap</p>
+</div>
+<hr>
+
+<div id="map-container">
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> <!-- Incluez Leaflet ici -->
+    <div id="colorPickerContainer"></div>
+
+
+
+
+</div>
+
+<script src="script.js"></script>
+<h5>Menu de fichiers</h5>
+
+<select id="fileDropdown" onchange="loadSelectedFile()">
+    <option value="" selected disabled>Choisissez un fichier</option>
+    <option value="1-world_bc123000.geojson">world_bc123000</option>
+    <option value="2-world_bc10000.geojson">world_bc10000</option>
+    <option value="3-world_bc8000.geojson">world_bc8000</option>
+    <option value="4-world_bc5000.geojson">world_bc5000</option>
+    <option value="5-world_bc4000.geojson">world_bc4000</option>
+    <option value="6-world_bc3000.geojson">world_bc3000</option>
+    <option value="7-world_bc2000.geojson">world_bc2000</option>
+    <option value="8-world_bc1500.geojson">world_bc1500</option>
+    <option value="9-world_bc1000.geojson">world_bc1000</option>
+    <option value="10-world_bc700.geojson">world_bc700</option>
+    <option value="11-world_bc500.geojson">world_bc500</option>
+    <option value="12-world_bc400.geojson">world_bc400</option>
+    <option value="13-world_bc323.geojson">world_bc323</option>
+    <option value="14-world_bc300.geojson">world_bc300</option>
+    <option value="15-world_bc200.geojson">world_bc200</option>
+    <option value="16-world_bc100.geojson">world_bc100</option>
+    <option value="17-world_bc1.geojson">world_bc1</option>
+    <option value="18-world_100.geojson">world_100</option>
+    <option value="19-world_200.geojson">world_200</option>
+    <option value="20-world_300.geojson">world_300</option>
+    <option value="21-world_400.geojson">world_400</option>
+    <option value="22-world_600.geojson">world_600</option>
+    <option value="23-world_700.geojson">world_700</option>
+    <option value="24-world_800.geojson">world_800</option>
+    <option value="25-world_900.geojson">world_900</option>
+    <option value="26-world_1100.geojson">world_1100</option>
+    <option value="27-world_1200.geojson">world_1200</option>
+    <option value="28-world_1279.geojson">world_1279</option>
+    <option value="29-world_1300.geojson">world_1300</option>
+    <option value="30-world_1400.geojson">world_1400</option>
+    <option value="31-world_1492.geojson">world_1492</option>
+    <option value="32-world_1500.geojson">world_1500</option>
+    <option value="33-world_1530.geojson">world_1530</option>
+    <option value="34-world_1600.geojson">world_1600</option>
+    <option value="35-world_1650.geojson">world_1650</option>
+    <option value="36-world_1700.geojson">world_1700</option>
+    <option value="37-world_1715.geojson">world_1715</option>
+    <option value="38-world_1783.geojson">world_1783</option>
+    <option value="39-world_1800.geojson">world_1800</option>
+    <option value="40-world_1815.geojson">world_1815</option>
+    <option value="41-world_1880.geojson">world_1880</option>
+    <option value="42-world_1900.geojson">world_1900</option>
+    <option value="43-world_1914.geojson">world_1914</option>
+    <option value="44-world_1920.geojson">world_1920</option>
+    <option value="45-world_1938.geojson">world_1938</option>
+    <option value="46-world_1945.geojson">world_1945</option>
+    <option value="47-world_1960.geojson">world_1960</option>
+    <option value="48-world_1994.geojson">world_1994</option>
+    <option value="49-world_2024.geojson">monde</option>
+    <option value="50-zee.geojson">zee</option>
+</select>
+<select id="continentDropdown" onchange="handleContinentChange()">
+    <option value="Monde">Monde</option>
+    <option value="Oceania">Océanie</option>
+    <option value="Europe">Europe</option>
+    <option value="North America">Amérique du Nord</option>
+    <option value="South America">Amérique du Sud</option>
+    <option value="Africa">Afrique</option>
+    <option value="Asia">Asie</option>
+
+</select>
+
+
+<h5>Tableau de pays sélectionnés</h5>
+<table id="selectedCountriesTable">
+    <thead>
+    <tr>
+        <th>Nom du pays</th>
+        <th>Couleur</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody id="selectedCountriesContainer">
+    <!-- Les lignes seront ajoutées dynamiquement ici -->
+    </tbody>
+</table>
+
+<div id="downloadContainer">
+    <button id="validateListButton" class="left">Valider</button>
+
+        <input type="text" id="fileNameInput" placeholder="Nom du fichier">
+
+    <button id="downloadButton" disabled class="right">Télécharger</button>
+</div>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a; /* Couleur de fond sombre */
+    color: #ffffff; /* Couleur du texte */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    background-image: url("/static/img/1.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.container h1 {
+    font-size: 3em;
+    color: #ffffff;
+    text-shadow: 2px 2px #000000;
+}
+
+.consigne {
+    text-align: center;
+    color: #ffffff; /* Couleur du texte */
+    margin-top: 20px;
+}
+
+#map-container {
+    position: relative;
+    width: 95%;
+    margin: 0 auto;
+}
+
+#map {
+    height: 500px;
+    width: 100%;
+}
+
+#colorPickerContainer {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 20px);
+    display: none;
+    z-index: 1000;
+}
+
+#downloadContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.center {
+    flex: 1;
+    margin: 0 10px;
+}
+
+.left {
+    margin-right: 10px;
+}
+
+.right {
+    margin-left: 10px;
+}
+
+#validateListButton,
+#downloadButton {
+    padding: 8px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#validateListButton:hover,
+#downloadButton:hover {
+    background-color: #45a049;
+}
+
+#fileDropdown,
+#continentDropdown {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#fileNameInput {
+    width: 200px;
+    padding: 8px;
+    font-size: 16px;
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+}
+
+#fileDropdown option,
+#continentDropdown option {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    font-size: 16px;
+}
+
+#selectedCountriesTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#selectedCountriesTable th, #selectedCountriesTable td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+    color: #ffffff;
+}
+
+#selectedCountriesTable th {
+    background-color: #333333;
+}
+
+#selectedCountriesTable tr:nth-child(even) {
+    background-color: #666666;
+}
