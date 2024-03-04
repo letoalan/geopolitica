@@ -10,7 +10,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 300px;
-    background-image: url("https://github.com/letoalan/geopolitica/blob/main/static/img/1.png?raw=true");
+    background-image: url("https://media.ouest-france.fr/v1/pictures/MjAyMzA0MTkzZWY1Mzg5ZDA2MDk1M2RlYmE4NDYwNzk0NWI5NTI?width=940&focuspoint=44%2C63&cropresize=1&client_id=bpeditorial&sign=ac612a5151079c1d3a0eadfccfcb16352e9fb4293337c9de0f257a2241edc461");
     background-size: cover;
     background-position: center;
 }
