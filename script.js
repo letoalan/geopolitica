@@ -390,7 +390,8 @@ function insertTemplate(selectedData) {
 
         let coords = [];
         if (geometry.geometry.type === 'Polygon') {
-            coords = [geometry.geometry.coordinates.map(coord => [coord[0], coord[1]])];
+            // Garder les crochets extérieurs pour les polygones simples
+            coords = geometry.geometry.coordinates.map(ring => ring.map(coord => [coord[0], coord[1]]));
         } else if (geometry.geometry.type === 'MultiPolygon') {
             coords = geometry.geometry.coordinates.flatMap(polygon => polygon.map(coord => coord.map(c => [c[0], c[1]])));
         }
