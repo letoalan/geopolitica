@@ -17,6 +17,7 @@ let selectedColors = []
 let selectedIdx = []
 
 map.on('click', function(event) {
+    console.log('New version')
     const colorPickerContainer = document.getElementById('colorPickerContainer');
     const clickedLayer = event.layer || event.originalEvent.target;
 
