@@ -15,61 +15,59 @@ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services'+'/World_Image
 let selectedCountries = [];
 let selectedColors = []
 let selectedIdx = []
-console.log(selectedCountries,selectedColors, selectedIdx)
-// Sélection de la zone de texte du nom de fichier
-
-
-
 
 map.on('click', function(event) {
-    // Afficher le color picker à côté du clic de la souris
     const colorPickerContainer = document.getElementById('colorPickerContainer');
-    console.log(colorPickerContainer)
+    const clickedLayer = event.layer || event.originalEvent.target;
+
+    if (colorPickerContainer && clickedLayer instanceof L.Path) {
+        const clickedCountry = clickedLayer.feature.properties.NAME;
+
+        if (!selectedCountries.includes(clickedCountry)) {
+            // Activer le color picker pour le pays sélectionné
+            activateColorPicker(event, clickedCountry);
+        } else {
+            console.log("Le color picker est déjà désactivé pour le pays : ", clickedCountry);
+        }
+    }
+});
+
+function activateColorPicker(event, clickedCountry) {
+    const colorPickerContainer = document.getElementById('colorPickerContainer');
+
     if (colorPickerContainer) {
         colorPickerContainer.style.display = 'block';
         colorPickerContainer.style.left = event.originalEvent.clientX + 'px';
         colorPickerContainer.style.top = event.originalEvent.clientY + 'px';
-    }
 
-    // Mettre à jour la couleur du pays sélectionné avec le color picker
-    const colorPicker = document.createElement('input');
-    colorPicker.type = 'color';
-    colorPicker.oninput = function() {
-        const selectedIdex = selectedIdx[selectedIdx.length -1]
-        const selectedCountry = selectedCountries[selectedCountries.length - 1];
-        const selectedColor = this.value; // Récupérer la couleur sélectionnée
-        console.log(selectedCountry, selectedColor + " Trop bien !!!")
-        updateCountryColor(selectedIdex,selectedCountry, selectedColor,0);
+        const colorPicker = document.createElement('input');
+        colorPicker.type = 'color';
+        colorPicker.oninput = function() {
+            const selectedIdex = selectedIdx[selectedIdx.length - 1];
+            const selectedColor = this.value;
+            updateCountryColor(selectedIdex, clickedCountry, selectedColor, 0);
+            selectedColors[selectedIdx.length - 1] = selectedColor;
+        };
 
-        // Mettre à jour selectedColors avec la nouvelle couleur
-        selectedColors[selectedIdx.length - 1] = selectedColor;
+        const validateButton = document.createElement('button');
+        validateButton.type = 'button';
+        validateButton.textContent = 'Valider';
+        validateButton.style.position = 'absolute';
+        validateButton.addEventListener('click', function() {
+            const selectedIdex = selectedIdx[selectedIdx.length - 1];
+            const selectedColor = selectedColors[selectedColors.length - 1];
+            updateSelectedCountries(selectedIdex, clickedCountry, selectedColor);
+            colorPickerContainer.innerHTML = '';
+            colorPickerContainer.style.display = 'none';
+            // Désactiver le clic sur le pays sélectionné
+            clickedLayer.off('click');
+        });
 
-        //updateSelectedCountries(selectedCountry, selectedColor);
-    };
-
-    // Créer le bouton Valider
-    const validateButton = document.createElement('button');
-    validateButton.type = 'button';
-    validateButton.textContent = 'Valider';
-    validateButton.style.position = 'absolute';
-    // Ajout d'un gestionnaire d'événements au clic sur le bouton Valider
-    validateButton.addEventListener('click', function() {
-        const selectedIdex = selectedIdx[selectedIdx.length -1]
-        const selectedCountry = selectedCountries[selectedCountries.length - 1];
-        const selectedColor = selectedColors[selectedColors.length - 1];
-        console.log(selectedCountry,selectedColor)
-        // Mettre ici le code pour valider la sélection de couleur
-        updateSelectedCountries(selectedIdex,selectedCountry, selectedColor);
-        console.log('Validation de la sélection de couleur');
         colorPickerContainer.innerHTML = '';
-    });
-
-    colorPickerContainer.innerHTML = '';
-    colorPickerContainer.appendChild(colorPicker);
-    colorPickerContainer.appendChild(validateButton);
-    console.log("Bouton de validation créé " + validateButton);
-});
-
+        colorPickerContainer.appendChild(colorPicker);
+        colorPickerContainer.appendChild(validateButton);
+    }
+}
 
 // Fonction pour charger le contenu du fichier sélectionné
 function loadSelectedFile() {
@@ -89,13 +87,13 @@ function loadSelectedFile() {
             })
             .then(data => {
                 countriesData = data;
-                console.log(data)
                 updateMap(data);
                 clearSelectedCountries(); // Réinitialiser la sélection de pays lors du chargement d'un nouveau fichier
             })
             .catch(error => console.error('Une erreur s\'est produite : ', error));
     }
 }
+
 function clearSelectedCountries() {
     // Réinitialiser les tableaux de pays sélectionnés, couleurs et index
     selectedCountries = [];
@@ -111,7 +109,6 @@ function clearSelectedCountries() {
     }
 
     mapLayers = {}
-
 
     // Réinitialiser l'interface utilisateur des pays sélectionnés
     const selectedCountriesContainer = document.getElementById('selectedCountriesContainer');
@@ -133,7 +130,6 @@ function handleContinentChange() {
         zoomToContinent();
     }
 }
-
 
 function zoomToContinent() {
     const dropdown = document.getElementById('continentDropdown');
@@ -181,7 +177,6 @@ function zoomToContinent() {
     }
 }
 
-
 function updateMap(data) {
     map.eachLayer(function (layer) {
         if (layer instanceof L.GeoJSON) {
@@ -196,23 +191,59 @@ function updateMap(data) {
         let geometry = feature.geometry;
         let countryName = properties.NAME;
         let countryGeometry = geometry;
-        let countryIndex = (i+1);
+
         // Créer une couche GeoJSON pour chaque entité
         let geojsonLayer = L.geoJSON(feature, {
             onEachFeature: function (feature, layer) {
                 layer.bindTooltip(countryName, { permanent: false, direction: 'auto' });
 
                 // Gestion de l'événement de clic pour chaque entité
-                layer.on('click', function () {
-                    console.log("Entité à l'index " + countryIndex + " : ", feature);
+                layer.on('click', function (e) {
+                    console.log("Entité cliquée:", feature);
 
-                    console.log('Nom du pays:', countryName);
-                    console.log('Géométrie du pays:', countryGeometry);
+                    // Afficher le color picker à côté du clic de la souris
+                    const colorPickerContainer = document.getElementById('colorPickerContainer');
+                    if (colorPickerContainer) {
+                        colorPickerContainer.style.display = 'block';
+                        colorPickerContainer.style.left = e.originalEvent.clientX + 'px';
+                        colorPickerContainer.style.top = e.originalEvent.clientY + 'px';
+                    }
 
-                    // Ajouter le nom du pays à votre tableau selectedCountries
-                    selectedIdx.push(countryIndex);
-                    selectedCountries.push(countryName);
-                    countryGeometries.push({geometry: countryGeometry});
+                    // Mettre à jour la couleur du pays sélectionné avec le color picker
+                    const colorPicker = document.createElement('input');
+                    colorPicker.type = 'color';
+                    colorPicker.oninput = function () {
+                        const selectedIdex = i + 1; // Index du pays sélectionné
+                        const selectedCountry = countryName;
+                        const selectedColor = this.value; // Récupérer la couleur sélectionnée
+                        console.log("Pays sélectionné:", selectedCountry);
+                        console.log("Couleur sélectionnée:", selectedColor);
+                        console.log("Index du pays sélectionné:", selectedIdex);
+                        updateCountryColor(selectedIdex, selectedCountry, selectedColor, 0);
+                    };
+
+                    // Créer le bouton Valider
+                    const validateButton = document.createElement('button');
+                    validateButton.type = 'button';
+                    validateButton.textContent = 'Valider';
+                    validateButton.style.position = 'absolute';
+                    validateButton.addEventListener('click', function () {
+                        const selectedIdex = i + 1; // Index du pays sélectionné
+                        const selectedCountry = countryName;
+                        const selectedColor = colorPicker.value; // Récupérer la couleur sélectionnée
+                        console.log("Pays sélectionné:", selectedCountry);
+                        console.log("Couleur sélectionnée:", selectedColor);
+                        console.log("Index du pays sélectionné:", selectedIdex);
+                        updateSelectedCountries(selectedIdex, selectedCountry, selectedColor);
+
+                        // Cacher le color picker
+                        colorPickerContainer.style.display = 'none';
+                    });
+
+                    // Ajouter le color picker et le bouton Valider au conteneur
+                    colorPickerContainer.innerHTML = '';
+                    colorPickerContainer.appendChild(colorPicker);
+                    colorPickerContainer.appendChild(validateButton);
                 });
             }
         });
@@ -223,7 +254,7 @@ function updateMap(data) {
 }
 
 
-function updateSelectedCountries(selectedIdex,selectedCountryName, selectedColor) {
+function updateSelectedCountries(selectedIdex, selectedCountryName, selectedColor) {
     const selectedCountriesContainer = document.getElementById('selectedCountriesContainer');
 
     // Vérifier si les éléments existent avant de les manipuler
@@ -243,7 +274,17 @@ function updateSelectedCountries(selectedIdex,selectedCountryName, selectedColor
         const colorPicker = document.createElement('input');
         colorPicker.type = 'color';
         colorPicker.value = selectedColor; // Utiliser la couleur sélectionnée sur la carte comme couleur par défaut
-        colorPicker.disabled = true; // Désactiver l'interaction utilisateur pour éviter les changements accidentels
+
+        // Gestionnaire d'événements pour mettre à jour la couleur sélectionnée
+        colorPicker.addEventListener('input', function() {
+            const updatedColor = this.value;
+            console.log("Nouvelle couleur sélectionnée pour", selectedCountryName, ":", updatedColor);
+            // Mettre à jour la couleur sur la carte
+            updateCountryColor(selectedIdex, selectedCountryName, updatedColor, 0);
+            // Mettre à jour les globales
+            const index = selectedCountries.indexOf(selectedCountryName);
+            selectedColors[index] = updatedColor;
+        });
 
         // Créer un bouton d'annulation pour supprimer la ligne correspondante
         const cancelButton = document.createElement('button');
@@ -251,8 +292,12 @@ function updateSelectedCountries(selectedIdex,selectedCountryName, selectedColor
         cancelButton.addEventListener('click', function() {
             // Supprimer la ligne lorsque le bouton d'annulation est cliqué
             selectedCountriesContainer.removeChild(countryRow);
-            updateCountryColor(selectedIdex,selectedCountryName, null, 1);
-            // Mettre à jour selectedCountries et selectedColors
+            updateCountryColor(selectedIdex, selectedCountryName, null, 1);
+            // Mettre à jour les globales
+            const index = selectedCountries.indexOf(selectedCountryName);
+            selectedCountries.splice(index, 1);
+            selectedColors.splice(index, 1);
+            countryGeometries.splice(index, 1);
         });
 
         // Ajouter les éléments aux cellules correspondantes
@@ -266,17 +311,28 @@ function updateSelectedCountries(selectedIdex,selectedCountryName, selectedColor
 
         // Ajouter la ligne au tableau de pays sélectionnés
         selectedCountriesContainer.appendChild(countryRow);
+
+        // Mettre à jour les globales
+        selectedCountries.push(selectedCountryName);
+        selectedColors.push(selectedColor);
+        countryGeometries.push({ geometry: getCountryGeometry(selectedCountryName) });
     } else {
         console.error("L'élément 'selectedCountriesContainer' n'a pas été trouvé dans le document.");
     }
 }
 
+// Fonction pour récupérer la géométrie du pays par son nom
+function getCountryGeometry(countryName) {
+    const countryGeoJSON = countriesData.features.find(
+        feature => feature.properties.NAME === countryName
+    );
+    return countryGeoJSON.geometry;
+}
+
 
 function updateCountryColor(selectedIdex,countryName, color, number) {
+    console.log(selectedIdex,countryName, color, number,"ligne313")
     if (countryName) {
-        console.log(selectedIdex,countryName, number)
-
-
         if (number === 0) {
             const countryGeoJSON = countriesData.features.find(
                 feature => feature.properties.INDEX === selectedIdex
@@ -295,7 +351,7 @@ function updateCountryColor(selectedIdex,countryName, color, number) {
             }).addTo(map);
             // Ajouter la couche GeoJSON à mapLayers
             mapLayers[selectedIdex] = countryLayer;
-            console.log(mapLayers)
+
             // Supprimer les couches GeoJSON existantes du pays de la carte
             map.eachLayer(function (layer) {
                 if (layer instanceof L.GeoJSON && layer.feature && layer.feature.properties && layer.feature.properties.INDEX === selectedIdex) {
@@ -303,11 +359,7 @@ function updateCountryColor(selectedIdex,countryName, color, number) {
                 }
             });
         } else {
-            console.log('Test pour effacer la couleur');
-            console.log(countryName,selectedIdex, "A l'attaque !!!")
-            console.log(mapLayers)
             const countryLayer = mapLayers[selectedIdex];
-            console.log(selectedIdex,countryName, countryLayer)
             if (countryLayer) {
                 // Supprimer la couche GeoJSON du pays de la carte
                 map.removeLayer(countryLayer);
@@ -356,30 +408,24 @@ document.addEventListener('DOMContentLoaded', function() {
             if (validateButton) {
                 validateButton.disabled = true;
             }
-
         }
 
-        console.log("Here we go to the end of the act !!!")
         disableOtherControls();
-        console.log(selectedCountries, selectedColors, 'Liste test')
-        console.log(countryGeometries)
+
         selectedData = retrieveSelectedData();
-        console.log(selectedData);
+        console.log(selectedData,'ligne394');
         insertTemplate(selectedData)
 
         function retrieveSelectedData() {
+            console.log(selectedCountries, selectedColors, countryGeometries)
             const selectedData = [];
             for (let i = 0; i < selectedCountries.length && i < selectedColors.length && i < countryGeometries.length; i++) {
                 selectedData.push([selectedCountries[i], selectedColors[i], countryGeometries[i]]);
             }
             return selectedData;
         }
-
-        });
     });
-
-
-
+});
 
 function insertTemplate(selectedData) {
     let inserts = [];
@@ -390,20 +436,18 @@ function insertTemplate(selectedData) {
 
         let coords = [];
         if (geometry.geometry.type === 'Polygon') {
-            // Garder les crochets extérieurs pour les polygones simples
             coords = geometry.geometry.coordinates.map(ring => ring.map(coord => [coord[0], coord[1]]));
         } else if (geometry.geometry.type === 'MultiPolygon') {
             coords = geometry.geometry.coordinates.flatMap(polygon => polygon.map(coord => coord.map(c => [c[0], c[1]])));
         }
-        console.log(coords)
+
         let feature = {
             "type": "Feature",
             "properties": {
                 "_umap_options": {
                     "color": color,
-                    "fillOpacity": 0.3,
-                    "name": name,
-                }
+                    "fillOpacity": 0.3},
+                "name": name,
             },
             "geometry": {
                 "type": "Polygon",
@@ -457,9 +501,8 @@ function insertTemplate(selectedData) {
         ]
     }`;
     // Stocker le template dans la variable globale templates
+    console.log(template)
     templates.push(template);
-
-
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -510,14 +553,15 @@ function downloadUMAPFile(content, fileName) {
     // Création d'un élément <a> pour le téléchargement
     const a = document.createElement('a');
     a.href = url;
-    a.download = fileName + '.umap'; // Ajout de l'extension .umap
+    a.download = `${fileName}.umap`; // Nom du fichier .umap
     document.body.appendChild(a);
 
-    // Clic sur l'élément <a> pour déclencher le téléchargement
+    // Clic automatique sur l'élément <a> pour déclencher le téléchargement
     a.click();
-    console.log("ok")
 
-    // Suppression de l'élément <a> et du Blob après le téléchargement
+    // Suppression de l'élément <a> du DOM
+    document.body.removeChild(a);
+
+    // Révocation de l'URL pour libérer la mémoire
     window.URL.revokeObjectURL(url);
-    a.remove();
 }
