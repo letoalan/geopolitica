@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planisphère Satellite avec Leaflet</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-
 </head>
 <body>
 <div class="container">
@@ -18,20 +16,19 @@
 </div>
 <hr>
 
+<!-- Conteneur de la carte -->
 <div id="map-container">
     <div id="map"></div>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> <!-- Incluez Leaflet ici -->
-    <div id="colorPickerContainer"></div>
-
-
-
-
+    <div id="colorPickerContainer"></div> <!-- Conteneur pour le color picker -->
 </div>
 
-<script src="script.js"></script>
-<h5>Menu de fichiers</h5>
+<!-- Scripts -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> <!-- Incluez Leaflet ici -->
+<script type="module" src="js/main.js"></script> <!-- Point d'entrée principal -->
 
-<select id="fileDropdown" onchange="loadSelectedFile()">
+<!-- Menu de fichiers -->
+<h5>Menu de fichiers</h5>
+<select id="fileDropdown">
     <option value="" selected disabled>Choisissez un fichier</option>
     <option value="1-world_bc123000.geojson">world_bc123000</option>
     <option value="2-world_bc10000.geojson">world_bc10000</option>
@@ -84,7 +81,9 @@
     <option value="49-world_2024.geojson">monde</option>
     <option value="50-zee.geojson">zee</option>
 </select>
-<select id="continentDropdown" onchange="handleContinentChange()">
+
+<!-- Menu des continents -->
+<select id="continentDropdown">
     <option value="Monde">Monde</option>
     <option value="Oceania">Océanie</option>
     <option value="Europe">Europe</option>
@@ -92,10 +91,9 @@
     <option value="South America">Amérique du Sud</option>
     <option value="Africa">Afrique</option>
     <option value="Asia">Asie</option>
-
 </select>
 
-
+<!-- Tableau de pays sélectionnés -->
 <h5>Tableau de pays sélectionnés</h5>
 <table id="selectedCountriesTable">
     <thead>
@@ -110,17 +108,11 @@
     </tbody>
 </table>
 
+<!-- Conteneur pour le téléchargement -->
 <div id="downloadContainer">
     <button id="validateListButton" class="left">Valider</button>
-
-        <input type="text" id="fileNameInput" placeholder="Nom du fichier">
-
+    <input type="text" id="fileNameInput" placeholder="Nom du fichier" required>
     <button id="downloadButton" disabled class="right">Télécharger</button>
 </div>
-
-
-
-
-
 </body>
 </html>
