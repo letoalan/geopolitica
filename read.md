@@ -7,9 +7,11 @@ Fonctionnalités
 
     Sélection de pays : Cliquez sur un pays pour le sélectionner et lui attribuer une couleur.
 
+    Sélection de la tuile vectorielle : Esri, google satellite, Nasa Blue Marble, IGN...
+
     Color picker : Utilisez un color picker pour choisir la couleur des pays sélectionnés.
 
-    Téléchargement de configurations : Exportez les pays sélectionnés et leurs couleurs dans un fichier .umap compatible avec l'application uMap.
+    Téléchargement de configurations : Exportez les pays sélectionnés et leurs couleurs dans un fichier .umap compatible avec l'application uMap ou en jpeg. 
 
     Zoom sur les continents : Changez la vue de la carte pour zoomer sur un continent spécifique.
 
@@ -125,4 +127,6 @@ Remerciements
     Merci à Leaflet pour la bibliothèque de cartes interactive.
 
     Merci à uMap pour l'inspiration du format .umap.
-
+    
+    Un très grand merci à André Ourednik et son formidable repo https://github.com/aourednik/historical-basemaps
+    
