@@ -1,4 +1,4 @@
-Géopolitica - Editeur de frontières dans le temps et l'espace
+Géopolitica 2.0 - Editeur de frontières dans le temps et l'espace
 
 Géopolitica est une application web interactive qui permet de visualiser et de manipuler des données géopolitiques sous forme de cartes interactives. Elle utilise la bibliothèque Leaflet pour afficher des cartes et des données GeoJSON, et permet à l'utilisateur de sélectionner des pays, de leur attribuer des couleurs, et de télécharger les configurations sous forme de fichiers .umap.
 Fonctionnalités
