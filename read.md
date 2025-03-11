@@ -115,9 +115,9 @@ Technologies utilisées
 
 Auteur
 
-    Votre Nom : Alan Duval.
+Alan Duval.
 
-    Contact : alanoduval@gmail.com
+alanoduval@gmail.com
 
 Licence
 
