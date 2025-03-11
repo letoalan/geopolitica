@@ -1,4 +1,3 @@
-// main.js
 import { mapManager } from './mapManager.js';
 import { dataManager } from './dataManager.js';
 import { uiManager } from './uiManager.js';
@@ -10,12 +9,67 @@ window.dataManager = dataManager;
 
 // Exposer la fonction removeSelectedCountry à l'interface utilisateur
 window.removeSelectedCountry = (countryName) => {
-    dataManager.removeSelectedCountry(countryName); // Supprimer le pays
-    uiManager.updateSelectedCountriesList(dataManager.getSelectedData()); // Mettre à jour l'interface utilisateur
+    dataManager.removeSelectedCountry(countryName);
+    uiManager.updateSelectedCountriesList(dataManager.getSelectedData());
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const map = mapManager.initMap('map', [0, 0], 2);
+    // Initialiser la carte avec le moteur de rendu Canvas
+    const map = mapManager.initMap('map', [0, 0], 2, {
+        renderer: L.canvas() // Utiliser Canvas pour le rendu des couches vectorielles
+    });
+
+    // Définir les fournisseurs de tuiles
+    const tileLayers = {
+        "OpenStreetMap": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }),
+        "CartoDB Light": L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://carto.com/attributions">CARTO</a>'
+        }),
+        "CartoDB Dark": L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://carto.com/attributions">CARTO</a>'
+        }),
+        "Stamen Terrain": L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png', {
+            attribution: '© <a href="https://stamen.com">Stamen Design</a>, © <a href="https://stadiamaps.com/">Stadia Maps</a>, © <a href="https://openmaptiles.org/">OpenMapTiles</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 18
+        }),
+        "IGN satellite": L.tileLayer('https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image%2Fjpeg', {
+            attribution: '© <a href="https://www.ign.fr/">IGN</a>',
+            maxZoom: 19
+        }),
+        "Esri2": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '© <a href="https://www.esri.com/">Esri</a>'
+        }),
+        "Google1": L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            attribution: '© <a href="https://www.google.com/">Google</a>'
+        }),
+        "Google2": L.tileLayer('https://mt1.google.com/vt/lyrs=t&x={x}&y={y}&z={z}', {
+            attribution: '© <a href="https://www.google.com/">Google</a>'
+        }),
+        "Google3": L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            attribution: '© <a href="https://www.google.com/">Google</a>'
+        }),
+        "NASA Blue Marble": L.tileLayer('http://s3.amazonaws.com/com.modestmaps.bluemarble/{z}-r{y}-c{x}.jpg', {
+            attribution: '© <a href="https://earthdata.nasa.gov">NASA</a>',
+            time: '2016-01-01'
+        }),
+        "NASA Black Marble": L.tileLayer('https://cdn.statically.io/gh/freetiler/nasa-blackmarble/main/tiles/{z}/{x}/{y}.jpeg', {
+            attribution: '© <a href="https://earthdata.nasa.gov">NASA</a>',
+            time: '2016-01-01', // Date par défaut, ajustable selon les disponibilités
+        }),
+        "Satellite": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '© <a href="https://www.esri.com/">Esri</a>'
+        }),
+    };
+
+    // Ajouter la couche par défaut (Satellite)
+    tileLayers["Satellite"].addTo(map);
+
+    // Ajouter le contrôle de tuiles
+    L.control.layers(tileLayers, null, {
+        position: 'topright'
+    }).addTo(map);
 
     // Définir les coordonnées centrales et le zoom pour chaque continent
     const continentViews = {
@@ -33,35 +87,25 @@ document.addEventListener('DOMContentLoaded', () => {
     continentDropdown.addEventListener('change', () => {
         const selectedContinent = continentDropdown.value;
         const view = continentViews[selectedContinent];
-
         if (view) {
-            mapManager.setView(view.center, view.zoom); // Utiliser mapManager.setView pour centrer et zoomer
+            mapManager.setView(view.center, view.zoom);
         }
     });
 
-    // Gérer le changement de fichier GeoJSON
-    document.getElementById('fileDropdown').addEventListener('change', async () => {
-        const filePath = `data/${document.getElementById('fileDropdown').value}`;
+    // Fonction pour charger et afficher les données GeoJSON
+    const loadAndDisplayGeoJSON = async (filePath) => {
         const data = await dataManager.loadSelectedFile(filePath);
         if (data) {
             mapManager.addGeoJSONLayer(data, (feature, layer) => {
-                // Ajouter un tooltip avec le nom du pays
                 layer.bindTooltip(feature.properties.NAME, { permanent: false, direction: 'auto' });
-
-                // Gérer le clic sur un pays
                 layer.on('click', (e) => {
-                    console.log("Pays cliqué :", feature.properties.NAME); // Log du pays cliqué
-                    console.log("INDEX du pays :", feature.properties.INDEX); // Log de l'INDEX
-
                     uiManager.showColorPicker(
                         e.originalEvent,
                         (color) => {
-                            console.log("Couleur choisie (mise à jour de la carte) :", color); // Log de la couleur choisie
-                            // Mettre à jour la couleur du pays sur la carte en utilisant l'INDEX
+                            // Mettre à jour la couleur du pays sur la carte
                             mapManager.updateCountryColor(feature.properties.INDEX, color);
                         },
                         (color) => {
-                            console.log("Couleur choisie (ajout au tableau) :", color); // Log de la couleur choisie
                             // Ajouter le pays sélectionné avec la couleur choisie
                             dataManager.addSelectedCountry(
                                 feature.properties.NAME, // Nom du pays
@@ -70,12 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 feature.properties.INDEX // INDEX du pays
                             );
 
-                            // Log des coordonnées pour vérifier si elles sont vides
-                            console.log("Coordonnées du pays sélectionné :", feature.geometry.coordinates);
-
-                            // Log du tableau des pays sélectionnés
-                            console.log("Tableau des pays sélectionnés :", dataManager.getSelectedData());
-
                             // Mettre à jour la liste des pays sélectionnés dans l'UI
                             uiManager.updateSelectedCountriesList(dataManager.getSelectedData());
                         }
@@ -83,51 +121,128 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         }
+    };
+
+    // Gérer le changement de fichier GeoJSON
+    document.getElementById('fileDropdown').addEventListener('change', async () => {
+        const filePath = `data/${document.getElementById('fileDropdown').value}`;
+        await loadAndDisplayGeoJSON(filePath);
     });
 
     // Gérer la validation de la liste
     const validateListButton = document.getElementById('validateListButton');
     const downloadButton = document.getElementById('downloadButton');
+    const resetButton = document.getElementById('resetButton');
     const fileNameInput = document.getElementById('fileNameInput');
+    const fileTypeSelector = document.getElementById('fileTypeSelector');
 
     validateListButton.addEventListener('click', () => {
         const selectedData = dataManager.getSelectedData();
         if (selectedData.length > 0) {
-            console.log("Liste validée :", selectedData); // Log des données sélectionnées
-            downloadButton.disabled = false; // Activer le bouton de téléchargement
-            fileNameInput.required = true; // Rendre le champ de saisie obligatoire
+            downloadButton.disabled = false;
+            fileNameInput.required = true;
+            mapManager.hideNonSelectedCountries(selectedData);
+            alert("La liste a été validée. Les pays non sélectionnés ont été masqués.");
         } else {
             alert("Aucun pays sélectionné. Veuillez choisir des pays avant de valider.");
         }
     });
 
-// Gérer le téléchargement du fichier
+    // Fonction pour exporter la carte en JPEG
+    const exportMapToJpeg = async (fileName) => {
+        console.log("Début de l'exportation JPEG pour le fichier :", fileName);
+        const mapContainer = document.getElementById('map');
+        const map = mapManager.getMap();
+
+        if (!mapContainer || !map) {
+            console.error("Erreur : mapContainer ou map non défini.");
+            alert("Erreur : la carte n'est pas correctement initialisée.");
+            return;
+        }
+
+        console.log("MapContainer trouvé :", mapContainer);
+
+        // Masquer temporairement les contrôles de carte
+        const controls = document.querySelectorAll('.leaflet-control-container');
+        controls.forEach(control => control.style.display = 'none');
+
+        // Forcer un redimensionnement de la carte
+        console.log("Redimensionnement de la carte...");
+        map.invalidateSize();
+
+        try {
+            console.log("Attente d'un court délai pour le rendu...");
+            await new Promise((resolve) => {
+                setTimeout(() => {
+                    console.log("Délai écoulé, prêt pour la capture.");
+                    resolve();
+                }, 500); // Délai de 500ms pour laisser le temps au rendu
+            });
+
+            console.log("Capture de la carte avec html2canvas...");
+            const finalCanvas = await html2canvas(mapContainer, {
+                useCORS: true,
+                logging: true,
+                scale: 2,
+                backgroundColor: '#FFFFFF'
+            });
+
+            console.log("Canvas généré :", finalCanvas);
+
+            // Télécharger l'image
+            const image = finalCanvas.toDataURL('image/jpeg', 1.0);
+            console.log("Image convertie en DataURL :", image.substring(0, 50) + "...");
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = `${fileName}.jpeg`;
+            link.click();
+
+            console.log("Image JPEG téléchargée avec succès !");
+        } catch (error) {
+            console.error("Erreur lors de l'export de l'image JPEG :", error);
+            alert(`Erreur lors de l'export de l'image : ${error.message}`);
+        } finally {
+            // Réafficher les contrôles de carte
+            controls.forEach(control => control.style.display = 'block');
+            console.log("Contrôles de la carte réaffichés.");
+        }
+    };
+
+    // Gérer le téléchargement du fichier
     downloadButton.addEventListener('click', () => {
         const fileName = fileNameInput.value.trim();
         if (fileName) {
-            const selectedData = dataManager.getSelectedData();
-            const template = templateManager.generateTemplate(selectedData);
-            templateManager.downloadTemplate(template, fileName); // Télécharger avec le nom spécifié
-
-            // Afficher un message de confirmation
-            alert("Le fichier a été téléchargé avec succès !");
-
-            // Réinitialiser l'interface utilisateur
-            dataManager.clearSelectedData(); // Vider la liste des pays sélectionnés
-            uiManager.updateSelectedCountriesList(dataManager.getSelectedData()); // Mettre à jour l'interface utilisateur
-            fileNameInput.value = ''; // Réinitialiser le champ de saisie
-            downloadButton.disabled = true; // Désactiver le bouton de téléchargement
-
-            // Réinitialiser la carte
-            mapManager.resetMap();
-
-            // Recharger le fichier GeoJSON actuel pour réattacher les gestionnaires d'événements
-            const filePath = `data/${document.getElementById('fileDropdown').value}`;
-            loadAndDisplayGeoJSON(filePath); // Réattacher les gestionnaires d'événements
+            const selectedFileType = fileTypeSelector.value;
+            console.log("Type de fichier sélectionné :", selectedFileType);
+            if (selectedFileType === 'umap') {
+                console.log("Exportation du fichier .umap...");
+                const selectedData = dataManager.getSelectedData();
+                const template = templateManager.generateTemplate(selectedData);
+                templateManager.downloadTemplate(template, fileName);
+                alert("Le fichier .umap a été téléchargé avec succès !");
+            } else if (selectedFileType === 'jpeg') {
+                console.log("Lancement de l'exportation JPEG...");
+                exportMapToJpeg(fileName);
+            }
         } else {
             alert("Veuillez entrer un nom de fichier valide.");
         }
     });
 
+    // Gérer la réinitialisation avec le nouveau bouton
+    resetButton.addEventListener('click', () => {
+        console.log("Réinitialisation de l'interface...");
+        resetInterface();
+    });
 
+    // Fonction pour réinitialiser l'interface utilisateur
+    const resetInterface = () => {
+        dataManager.clearSelectedData();
+        uiManager.updateSelectedCountriesList(dataManager.getSelectedData());
+        fileNameInput.value = '';
+        downloadButton.disabled = true;
+        mapManager.resetMap();
+        const filePath = `data/${document.getElementById('fileDropdown').value}`;
+        loadAndDisplayGeoJSON(filePath);
+    };
 });

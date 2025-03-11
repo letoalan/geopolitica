@@ -3,12 +3,20 @@ export const mapManager = (() => {
     let map;
     let mapLayers = {};
 
-    const initMap = (containerId, initialView, initialZoom) => {
-        map = L.map(containerId).setView(initialView, initialZoom);
+    const initMap = (containerId, initialView, initialZoom, options = {}) => {
+        map = L.map(containerId, options).setView(initialView, initialZoom);
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             minZoom: 0,
             maxZoom: 18,
+            attribution: '© <a href="https://www.esri.com/">Esri</a>'
         }).addTo(map);
+        return map;
+    };
+
+    const getMap = () => {
+        if (!map) {
+            console.error("La carte n'est pas initialisée. Appelez initMap d'abord.");
+        }
         return map;
     };
 
@@ -19,6 +27,7 @@ export const mapManager = (() => {
                 map.removeLayer(layer);
             }
         });
+        mapLayers = {}; // Réinitialiser les couches stockées
 
         // Ajouter la nouvelle couche GeoJSON
         const geoJSONLayer = L.geoJSON(data, {
@@ -43,15 +52,15 @@ export const mapManager = (() => {
     };
 
     const updateCountryColor = (countryId, color) => {
-        console.log("Tentative de mise à jour de la couleur pour l'INDEX :", countryId); // Log de l'INDEX
+        console.log("Tentative de mise à jour de la couleur pour l'INDEX :", countryId);
         if (mapLayers[countryId]) {
-            console.log("Couleur appliquée :", color); // Log de la couleur
+            console.log("Couleur appliquée :", color);
             mapLayers[countryId].setStyle({
                 fillColor: color,
                 fillOpacity: 0.5 // Ajuster l'opacité si nécessaire
             });
         } else {
-            console.error("Aucune couche trouvée pour l'INDEX :", countryId); // Log d'erreur
+            console.error("Aucune couche trouvée pour l'INDEX :", countryId);
         }
     };
 
@@ -64,7 +73,7 @@ export const mapManager = (() => {
 
     const setView = (center, zoom) => {
         if (map) {
-            map.setView(center, zoom); // Centrer et zoomer la carte
+            map.setView(center, zoom);
         } else {
             console.error("La carte n'est pas initialisée.");
         }
@@ -80,13 +89,35 @@ export const mapManager = (() => {
         mapLayers = {}; // Réinitialiser les couches stockées
     };
 
+    const hideNonSelectedCountries = (selectedData) => {
+        const selectedIndices = selectedData.map(country => country.index);
+
+        // Parcourir toutes les couches de la carte
+        Object.keys(mapLayers).forEach(countryId => {
+            if (!selectedIndices.includes(parseInt(countryId))) {
+                // Masquer les pays non sélectionnés
+                mapLayers[countryId].setStyle({
+                    fillOpacity: 0, // Rendre le pays transparent
+                    opacity: 0, // Rendre la bordure transparente
+                });
+            } else {
+                // Afficher les pays sélectionnés
+                mapLayers[countryId].setStyle({
+                    fillOpacity: 0.5, // Ajuster l'opacité si nécessaire
+                    opacity: 1, // Afficher la bordure
+                });
+            }
+        });
+    };
 
     return {
         initMap,
+        getMap, // Ajout de la méthode pour exposer l'instance de la carte
         addGeoJSONLayer,
         updateCountryColor,
         removeCountryLayer,
-        setView, // Exposer la méthode setView
+        setView,
         resetMap,
+        hideNonSelectedCountries,
     };
 })();
