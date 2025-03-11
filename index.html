@@ -6,6 +6,8 @@
     <title>Planisphère Satellite avec Leaflet</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="lib/leaflet-image.js"></script> <!-- Charger leaflet-image.js -->
 </head>
 <body>
 <div class="container">
@@ -15,17 +17,14 @@
     <p>Choisissez le fichier GeoJSON, puis le continent et les pays que vous souhaitez, en fonction du code des tableaux (index) et leur couleur individuelle, avant de télécharger un fichier .umap exportable vers l'application umap</p>
 </div>
 <hr>
-
 <!-- Conteneur de la carte -->
 <div id="map-container">
     <div id="map"></div>
     <div id="colorPickerContainer"></div> <!-- Conteneur pour le color picker -->
 </div>
-
 <!-- Scripts -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> <!-- Incluez Leaflet ici -->
 <script type="module" src="js/main.js"></script> <!-- Point d'entrée principal -->
-
 <!-- Menu de fichiers -->
 <h5>Menu de fichiers</h5>
 <select id="fileDropdown">
@@ -81,7 +80,6 @@
     <option value="49-world_2024.geojson">monde</option>
     <option value="50-zee.geojson">zee</option>
 </select>
-
 <!-- Menu des continents -->
 <select id="continentDropdown">
     <option value="Monde">Monde</option>
@@ -92,7 +90,6 @@
     <option value="Africa">Afrique</option>
     <option value="Asia">Asie</option>
 </select>
-
 <!-- Tableau de pays sélectionnés -->
 <h5>Tableau de pays sélectionnés</h5>
 <table id="selectedCountriesTable">
@@ -107,12 +104,19 @@
     <!-- Les lignes seront ajoutées dynamiquement ici -->
     </tbody>
 </table>
-
 <!-- Conteneur pour le téléchargement -->
 <div id="downloadContainer">
     <button id="validateListButton" class="left">Valider</button>
     <input type="text" id="fileNameInput" placeholder="Nom du fichier" required>
+    <!-- Sélecteur de type de fichier -->
+    <select id="fileTypeSelector">
+        <option value="umap">.umap</option>
+        <option value="jpeg">JPEG</option>
+    </select>
+    <!-- Bouton de téléchargement -->
     <button id="downloadButton" disabled class="right">Télécharger</button>
+    <!-- Bouton de réinitialisation -->
+    <button id="resetButton" class="right">Réinitialiser</button>
 </div>
 </body>
 </html>
