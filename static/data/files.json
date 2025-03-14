@@ -1,0 +1,202 @@
+[
+  {
+    "value": "1-world_bc123000.geojson",
+    "name": "world_bc123000"
+  },
+  {
+    "value": "2-world_bc10000.geojson",
+    "name": "world_bc10000"
+  },
+  {
+    "value": "3-world_bc8000.geojson",
+    "name": "world_bc8000"
+  },
+  {
+    "value": "4-world_bc5000.geojson",
+    "name": "world_bc5000"
+  },
+  {
+    "value": "5-world_bc4000.geojson",
+    "name": "world_bc4000"
+  },
+  {
+    "value": "6-world_bc3000.geojson",
+    "name": "world_bc3000"
+  },
+  {
+    "value": "7-world_bc2000.geojson",
+    "name": "world_bc2000"
+  },
+  {
+    "value": "8-world_bc1500.geojson",
+    "name": "world_bc1500"
+  },
+  {
+    "value": "9-world_bc1000.geojson",
+    "name": "world_bc1000"
+  },
+  {
+    "value": "10-world_bc700.geojson",
+    "name": "world_bc700"
+  },
+  {
+    "value": "11-world_bc500.geojson",
+    "name": "world_bc500"
+  },
+  {
+    "value": "12-world_bc400.geojson",
+    "name": "world_bc400"
+  },
+  {
+    "value": "13-world_bc323.geojson",
+    "name": "world_bc323"
+  },
+  {
+    "value": "14-world_bc300.geojson",
+    "name": "world_bc300"
+  },
+  {
+    "value": "15-world_bc200.geojson",
+    "name": "world_bc200"
+  },
+  {
+    "value": "16-world_bc100.geojson",
+    "name": "world_bc100"
+  },
+  {
+    "value": "17-world_bc1.geojson",
+    "name": "world_bc1"
+  },
+  {
+    "value": "18-world_100.geojson",
+    "name": "world_100"
+  },
+  {
+    "value": "19-world_200.geojson",
+    "name": "world_200"
+  },
+  {
+    "value": "20-world_300.geojson",
+    "name": "world_300"
+  },
+  {
+    "value": "21-world_400.geojson",
+    "name": "world_400"
+  },
+  {
+    "value": "22-world_600.geojson",
+    "name": "world_600"
+  },
+  {
+    "value": "23-world_700.geojson",
+    "name": "world_700"
+  },
+  {
+    "value": "24-world_800.geojson",
+    "name": "world_800"
+  },
+  {
+    "value": "25-world_900.geojson",
+    "name": "world_900"
+  },
+  {
+    "value": "26-world_1100.geojson",
+    "name": "world_1100"
+  },
+  {
+    "value": "27-world_1200.geojson",
+    "name": "world_1200"
+  },
+  {
+    "value": "28-world_1279.geojson",
+    "name": "world_1279"
+  },
+  {
+    "value": "29-world_1300.geojson",
+    "name": "world_1300"
+  },
+  {
+    "value": "30-world_1400.geojson",
+    "name": "world_1400"
+  },
+  {
+    "value": "31-world_1492.geojson",
+    "name": "world_1492"
+  },
+  {
+    "value": "32-world_1500.geojson",
+    "name": "world_1500"
+  },
+  {
+    "value": "33-world_1530.geojson",
+    "name": "world_1530"
+  },
+  {
+    "value": "34-world_1600.geojson",
+    "name": "world_1600"
+  },
+  {
+    "value": "35-world_1650.geojson",
+    "name": "world_1650"
+  },
+  {
+    "value": "36-world_1700.geojson",
+    "name": "world_1700"
+  },
+  {
+    "value": "37-world_1715.geojson",
+    "name": "world_1715"
+  },
+  {
+    "value": "38-world_1783.geojson",
+    "name": "world_1783"
+  },
+  {
+    "value": "39-world_1800.geojson",
+    "name": "world_1800"
+  },
+  {
+    "value": "40-world_1815.geojson",
+    "name": "world_1815"
+  },
+  {
+    "value": "41-world_1880.geojson",
+    "name": "world_1880"
+  },
+  {
+    "value": "42-world_1900.geojson",
+    "name": "world_1900"
+  },
+  {
+    "value": "43-world_1914.geojson",
+    "name": "world_1914"
+  },
+  {
+    "value": "44-world_1920.geojson",
+    "name": "world_1920"
+  },
+  {
+    "value": "45-world_1938.geojson",
+    "name": "world_1938"
+  },
+  {
+    "value": "46-world_1945.geojson",
+    "name": "world_1945"
+  },
+  {
+    "value": "47-world_1960.geojson",
+    "name": "world_1960"
+  },
+  {
+    "value": "48-world_1994.geojson",
+    "name": "world_1994"
+  },
+  {
+    "value": "49-world_2024.geojson",
+    "name": "monde"
+  },
+  {
+    "value": "50-zee.geojson",
+    "name": "zee"
+  }
+]
