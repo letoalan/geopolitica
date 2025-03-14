@@ -42,21 +42,95 @@ Comment utiliser l'application
         Cliquez sur "Télécharger" pour exporter la configuration au format .umap.
 
 Structure du projet
+Fichiers principaux
 
-    index.html : Le fichier HTML principal qui structure l'interface utilisateur.
+    index.html :
 
-    styles.css : Le fichier CSS pour le style de l'application.
+        Le fichier HTML principal qui structure l'interface utilisateur.
 
-    main.js : Le point d'entrée JavaScript de l'application.
+        Contient la carte Leaflet, les menus déroulants, le tableau des pays sélectionnés, et les boutons d'interaction.
 
-    dataManager.js : Gère le chargement des fichiers GeoJSON et la sélection des pays.
+    styles.css :
 
-    mapManager.js : Gère l'initialisation de la carte Leaflet et l'affichage des couches GeoJSON.
+        Le fichier CSS pour le style de l'application.
 
-    uiManager.js : Gère l'interface utilisateur, y compris le color picker et la mise à jour du tableau des pays sélectionnés.
+        Gère la mise en page, les couleurs, les animations, et les styles des composants (carte, tableau, boutons, etc.).
 
-    templateManager.js : Génère et télécharge le fichier .umap à partir des pays sélectionnés.
+        Structuré de manière modulaire pour une meilleure organisation et maintenabilité.
 
+    main.js :
+
+        Le point d'entrée JavaScript de l'application.
+
+        Initialise la carte, charge les fichiers GeoJSON, et gère les interactions globales.
+
+        Expose les fonctions principales comme removeSelectedCountry pour l'interface utilisateur.
+
+    dataManager.js :
+
+        Gère le chargement des fichiers GeoJSON et la sélection des pays.
+
+        Contient les fonctions pour ajouter, supprimer, et récupérer les pays sélectionnés.
+
+        Gère également la liste des fichiers disponibles.
+
+    mapManager.js :
+
+        Gère l'initialisation de la carte Leaflet et l'affichage des couches GeoJSON.
+
+        Contient les fonctions pour :
+
+            Ajouter des couches GeoJSON à la carte.
+
+            Mettre à jour la couleur des pays.
+
+            Réinitialiser la couleur des pays à leur valeur par défaut.
+
+            Masquer ou afficher les pays non sélectionnés.
+
+            Supprimer des couches de la carte.
+
+    uiManager.js :
+
+        Gère l'interface utilisateur, y compris :
+
+            Le color picker pour choisir la couleur des pays.
+
+            La mise à jour du tableau des pays sélectionnés.
+
+            La gestion des interactions utilisateur (validation, annulation, etc.).
+
+    templateManager.js :
+
+        Génère et télécharge le fichier .umap à partir des pays sélectionnés.
+
+        Convertit les données des pays sélectionnés en un format compatible avec l'application umap.
+
+    eventHandlers.js :
+
+        Gère les événements utilisateur, tels que :
+
+            Le changement de continent ou de fichier GeoJSON.
+
+            La validation de la liste des pays sélectionnés.
+
+            Le téléchargement des fichiers (.umap ou .jpeg).
+
+            La réinitialisation de l'interface.
+
+    exportUtils.js :
+
+        Contient les utilitaires pour exporter la carte :
+
+            Exportation de la carte en fichier JPEG.
+
+            Réinitialisation de l'interface (carte, tableau, etc.).
+
+            Chargement et affichage des fichiers GeoJSON.
+
+Arborescence CSS
+
+Le fichier styles.css est structuré de manière modulaire pour une meilleure organisation et maintenabilité.
 Prérequis
 
     Un navigateur web moderne (Chrome, Firefox, Edge, etc.).
