@@ -52,12 +52,23 @@ export const mapManager = (() => {
     };
 
     const updateCountryColor = (countryId, color) => {
-        console.log("Tentative de mise à jour de la couleur pour l'INDEX :", countryId);
         if (mapLayers[countryId]) {
-            console.log("Couleur appliquée :", color);
             mapLayers[countryId].setStyle({
                 fillColor: color,
                 fillOpacity: 0.5 // Ajuster l'opacité si nécessaire
+            });
+        } else {
+            console.error("Aucune couche trouvée pour l'INDEX :", countryId);
+        }
+    };
+
+    const resetCountryColor = (countryId) => {
+        if (mapLayers[countryId]) {
+            mapLayers[countryId].setStyle({
+                fillColor: '#ffffff', // Couleur par défaut (blanc)
+                fillOpacity: 0.3, // Opacité par défaut
+                color: '#000000', // Couleur de la bordure par défaut
+                weight: 1 // Épaisseur de la bordure par défaut
             });
         } else {
             console.error("Aucune couche trouvée pour l'INDEX :", countryId);
@@ -112,9 +123,10 @@ export const mapManager = (() => {
 
     return {
         initMap,
-        getMap, // Ajout de la méthode pour exposer l'instance de la carte
+        getMap,
         addGeoJSONLayer,
         updateCountryColor,
+        resetCountryColor, // Exposer la nouvelle fonction
         removeCountryLayer,
         setView,
         resetMap,

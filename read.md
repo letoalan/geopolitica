@@ -113,9 +113,9 @@ Technologies utilisées
 
 Auteur
 
-    Votre Nom : Alan Duval.
+    Alan Duval.
 
-    Contact : alanoduval@gmail.com
+    alanoduval@gmail.com
 
 Licence
 
@@ -125,4 +125,6 @@ Remerciements
     Merci à Leaflet pour la bibliothèque de cartes interactive.
 
     Merci à uMap pour l'inspiration du format .umap.
+
+    Un très grand merci à André Ourednik et son formidable repo https://github.com/aourednik/historical-basemaps
 

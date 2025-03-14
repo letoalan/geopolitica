@@ -3,7 +3,7 @@ export const dataManager = (() => {
     let countriesData = [];
     let selectedCountries = [];
     let selectedColors = [];
-    let selectedIdx = []; // Stocke les INDEX des pays sélectionnés
+    let selectedIdx = [];
     let countryGeometries = [];
 
     const loadSelectedFile = async (filePath) => {
@@ -18,6 +18,19 @@ export const dataManager = (() => {
         }
     };
 
+    // Nouvelle fonction pour charger la liste des fichiers GeoJSON
+    const loadFileList = async (jsonPath = 'static/data/files.json') => {
+        try {
+            const response = await fetch(jsonPath);
+            if (!response.ok) throw new Error('Fichier JSON de la liste introuvable');
+            const fileList = await response.json();
+            return fileList;
+        } catch (error) {
+            console.error('Erreur lors du chargement de la liste des fichiers :', error);
+            return [];
+        }
+    };
+
     const getCountryGeometry = (countryName) => {
         return countriesData.features.find(
             (feature) => feature.properties.NAME === countryName
@@ -27,8 +40,8 @@ export const dataManager = (() => {
     const addSelectedCountry = (countryName, color, geometry, index) => {
         selectedCountries.push(countryName);
         selectedColors.push(color);
-        selectedIdx.push(index); // Ajouter l'INDEX du pays
-        countryGeometries.push(geometry); // Ajouter la géométrie directement
+        selectedIdx.push(index);
+        countryGeometries.push(geometry);
     };
 
     const removeSelectedCountry = (countryName) => {
@@ -45,8 +58,8 @@ export const dataManager = (() => {
         return selectedCountries.map((country, index) => ({
             name: country,
             color: selectedColors[index],
-            geometry: countryGeometries[index], // Retourner la géométrie directement
-            index: selectedIdx[index], // Retourner l'INDEX du pays
+            geometry: countryGeometries[index],
+            index: selectedIdx[index],
         }));
     };
 
@@ -59,6 +72,7 @@ export const dataManager = (() => {
 
     return {
         loadSelectedFile,
+        loadFileList, // Exposer la nouvelle fonction
         getCountryGeometry,
         addSelectedCountry,
         removeSelectedCountry,

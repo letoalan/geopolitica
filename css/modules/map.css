@@ -1,0 +1,114 @@
+#map {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+#tileSelector {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    background: white;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+#tileButton {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#tileOptions {
+    margin-top: 5px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+#tileOptions button {
+    display: block;
+    width: 100%;
+    padding: 5px;
+    margin: 2px 0;
+    background: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+#tileOptions button:hover {
+    background: #ddd;
+}
+
+#colorPickerContainer {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: opacity 0.3s ease;
+}
+
+#selectedCountriesContainer.hidden {
+    display: none !important;
+}
+
+#colorPickerContainer button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#colorPickerContainer button.cancel {
+    background-color: #f0f0f0;
+}
+
+#tempColorInput {
+    color: transparent !important;
+    background-color: #000000 !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+.clr-field {
+    display: block !important;
+}
+
+.clr-field span.clr-display {
+    display: none !important;
+}
+
+.clr-picker.large {
+    background-color: #333333 !important;
+    color: #ffffff;
+}
+
+.clr-swatches button {
+    border: 1px solid #ffffff;
+    width: 40px;
+    height: 40px;
+}
+
+@media (max-width: 768px) {
+    #colorPickerContainer {
+        width: 80%;
+        max-width: 300px;
+    }
+}

@@ -1,0 +1,59 @@
+#selectedCountriesTable {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+    background-color: #333333;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#selectedCountriesTable th,
+#selectedCountriesTable td {
+    border: 1px solid #444444;
+    padding: 8px;
+    text-align: left;
+    color: #ffffff;
+}
+
+#selectedCountriesTable th {
+    background-color: #444444;
+}
+
+#selectedCountriesTable tr:nth-child(even) {
+    background-color: #555555;
+}
+
+#selectedCountriesTable tr:hover {
+    background-color: #666666;
+}
+
+/* Style des cartouches de couleur dans le tableau */
+.coloris-table-input {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%; /* Rendre les cartouches rondes */
+    cursor: pointer;
+    border: 2px solid #ffffff; /* Bordure blanche pour mieux les distinguer */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animation au survol */
+}
+
+.coloris-table-input:hover {
+    transform: scale(1.1); /* Agrandir légèrement au survol */
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8); /* Ajouter une ombre au survol */
+}
+
+.cancel-button {
+    background-color: #ff4d4d; /* Rouge pour indiquer une action de suppression */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease, transform 0.2s ease; /* Animation au survol */
+}
+
+.cancel-button:hover {
+    background-color: #cc0000; /* Rouge plus foncé au survol */
+    transform: scale(1.05); /* Légèrement agrandir au survol */
+}
