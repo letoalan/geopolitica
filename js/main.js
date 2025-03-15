@@ -4,6 +4,31 @@ import { uiManager } from './carto/uiManager.js';
 import { templateManager } from './carto/templateManager.js';
 import { initEventHandlers } from './carto/eventHandlers.js';
 
+
+
+// Fonction pour détecter si l'écran est un smartphone
+function isMobileScreen() {
+    return window.matchMedia("(max-width: 768px)").matches;
+}
+
+// Fonction pour appliquer les styles en fonction du type d'écran
+function applyScreenSpecificStyles() {
+    const body = document.body;
+
+    if (isMobileScreen()) {
+        // Ajouter une classe pour le mode mobile
+        body.classList.add('mobile-view');
+    } else {
+        // Retirer la classe mobile et conserver le mode 16/9
+        body.classList.remove('mobile-view');
+    }
+}
+
+// Appliquer les styles au chargement de la page
+document.addEventListener('DOMContentLoaded', applyScreenSpecificStyles);
+
+// Réappliquer les styles en cas de redimensionnement de la fenêtre
+window.addEventListener('resize', applyScreenSpecificStyles);
 // Exposer mapManager et dataManager à l'interface utilisateur
 window.mapManager = mapManager;
 window.dataManager = dataManager;

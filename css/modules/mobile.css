@@ -1,0 +1,78 @@
+/* Styles par défaut pour les écrans larges (16/9) */
+#downloadContainer {
+    display: flex;
+    justify-content: space-between; /* Alignement horizontal */
+    align-items: center; /* Centrage vertical */
+    margin-top: 20px;
+    padding: 0 20px; /* Padding pour les écrans larges */
+}
+
+#validateListButton,
+#downloadButton,
+#resetButton {
+    padding: 8px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#fileTypeSelector,
+#fileNameInput {
+    padding: 8px;
+    font-size: 16px;
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#resetButton {
+    background-color: #ff4d4d; /* Rouge pour le bouton Réinitialiser */
+}
+
+#resetButton:hover {
+    background-color: #cc0000; /* Rouge plus foncé au survol */
+}
+
+/* Styles spécifiques pour les smartphones */
+@media (max-width: 768px) {
+    #downloadContainer {
+        flex-direction: column; /* Disposition en colonne */
+        gap: 10px; /* Espacement entre les lignes */
+        padding: 0 10px; /* Padding réduit pour les smartphones */
+    }
+
+    /* Première ligne : Valider et sélecteur de format */
+    .download-row {
+        display: flex;
+        justify-content: space-between; /* Alignement horizontal */
+        gap: 10px; /* Espacement entre les éléments */
+        width: 100%; /* Pleine largeur */
+    }
+
+    /* Deuxième ligne : Télécharger et Réinitialiser */
+    .download-row:last-child {
+        margin-top: 10px; /* Espacement entre les deux lignes */
+    }
+
+    /* Styles pour les boutons et le sélecteur de format sur smartphones */
+    #validateListButton,
+    #fileTypeSelector,
+    #downloadButton,
+    #resetButton {
+        width: 100%; /* Pleine largeur pour les boutons et le sélecteur */
+        padding: 12px 20px; /* Rembourrage plus grand pour un meilleur toucher */
+        font-size: 16px; /* Taille de police plus grande */
+        border-radius: 8px; /* Bords plus arrondis */
+        margin: 0; /* Supprimer les marges */
+    }
+
+    #fileNameInput {
+        width: 100%; /* Pleine largeur pour le champ de texte */
+        margin: 0 0 10px 0; /* Espacement en bas */
+    }
+}
